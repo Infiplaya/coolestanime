@@ -8,19 +8,40 @@ import { trpc } from "../utils/trpc";
 import type { RouterOutput } from "../server/trpc/router/_app";
 
 const Home: NextPage = () => {
-  const [ids, setIds] = useState(() => getOptionsForVote());
+  const [ids, setIds] = useState(getOptionsForVote());
   const [first, second] = ids;
 
-  const firstCharacter = trpc.getCharacter.getCharacters.useQuery({
-    id: first ?? null,
-  });
-  const secondCharacter = trpc.getCharacter.getCharacters.useQuery({
-    id: second ?? null,
-  });
+  const firstCharacter = trpc.getCharacter.getCharacters.useQuery(
+    {
+      id: first ?? null,
+    },
+    {
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  const secondCharacter = trpc.getCharacter.getCharacters.useQuery(
+    {
+      id: second ?? null,
+    },
+    {
+      refetchInterval: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const voteMutation = trpc.getVotes.castVote.useMutation();
 
   const voteForCoolest = (selected: number) => {
-    // todo: do it bro
+    if (!first || !second) return;
 
+    if (selected === first) {
+      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    } else {
+      voteMutation.mutate({ votedFor: second, votedAgainst: first });
+    }
     setIds(getOptionsForVote());
   };
 
@@ -80,7 +101,7 @@ const CharacterListing: React.FC<{
         {props.character.name}
       </h2>
       <button
-        onClick={() => props.vote}
+        onClick={() => props.vote()}
         className="mt-5 rounded-lg bg-emerald-500 px-3 py-1"
       >
         Cooler

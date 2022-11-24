@@ -1,9 +1,10 @@
 import { inferRouterOutputs } from '@trpc/server';
 import { router } from '../trpc';
-import { charactersRouter } from './animeCharacter';
+import { charactersRouter, votesRouter } from './animeCharacter';
 
 export const appRouter = router({
-  getCharacter: charactersRouter
+  getCharacter: charactersRouter,
+  getVotes: votesRouter,
 });
 
 export type AppRouter = typeof appRouter;

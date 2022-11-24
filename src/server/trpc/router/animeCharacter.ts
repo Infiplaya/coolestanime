@@ -23,7 +23,7 @@ export const charactersRouter = router({
       }),
   });
 
-  export const buyRouter = router({
+  export const votesRouter = router({
     castVote: publicProcedure
       .input(
         z.object({

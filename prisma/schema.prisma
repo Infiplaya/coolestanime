@@ -2,31 +2,19 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
 model Vote {
-  id             String   @id @default(cuid())
-  createdAt      DateTime @default(now())
-  votedFor       AnimeCharacter  @relation(name: "votesFor", fields: [votedForId], references: [id])
-  votedForId     Int
-  votedAgainst   AnimeCharacter  @relation(name: "votesAgainst", fields: [votedAgainstId], references: [id])
-  votedAgainstId Int
-
-  @@index([votedForId])
-  @@index([votedAgainstId])
-}
-
-model AnimeCharacter {
-  id          Int    @id
-  name        String
-  imageUrl   String
-  VoteFor     Vote[] @relation("votesFor")
-  VoteAgainst Vote[] @relation("votesAgainst")
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  votedFor     Int
+  votedAgainst Int
 }
