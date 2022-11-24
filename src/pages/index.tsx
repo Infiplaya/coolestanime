@@ -5,17 +5,24 @@ import { useState } from "react";
 import Image from "next/image";
 
 import { trpc } from "../utils/trpc";
+import type { RouterOutput } from "../server/trpc/router/_app";
 
 const Home: NextPage = () => {
   const [ids, setIds] = useState(() => getOptionsForVote());
   const [first, second] = ids;
 
-  const { data: firstCharacter, isLoading: loading1 } =
-    trpc.getCharacter.getCharacters.useQuery({ id: first ?? null });
-  const { data: secondCharacter, isLoading: loading2 } =
-    trpc.getCharacter.getCharacters.useQuery({ id: second ?? null });
+  const firstCharacter = trpc.getCharacter.getCharacters.useQuery({
+    id: first ?? null,
+  });
+  const secondCharacter = trpc.getCharacter.getCharacters.useQuery({
+    id: second ?? null,
+  });
 
-  if (loading1 || loading2) return <div>Loading...</div>;
+  const voteForCoolest = (selected: number) => {
+    // todo: do it bro
+
+    setIds(getOptionsForVote());
+  };
 
   return (
     <>
@@ -29,36 +36,56 @@ const Home: NextPage = () => {
           Who is coolest anime character?{" "}
         </h1>
         <div className="mt-10 flex items-center justify-between border-2 border-white p-20">
-          <div className="h-64 w-64 bg-blue-700 space-y-5">
-            <Image
-              src={firstCharacter.data.images.jpg.image_url}
-              alt="character"
-              width={400}
-              height={400}
-              priority={true}
-              className="h-64 w-64 object-cover"
-            ></Image>
-            <h2 className="text-center text-xl font-medium">
-              {firstCharacter.data.name}
-            </h2>
-          </div>
-          <div className="p-8">vs</div>
-          <div className="h-64 w-64 bg-blue-700 space-y-5">
-            <Image
-              src={secondCharacter.data.images.jpg.image_url}
-              alt="character"
-              width={400}
-              height={400}
-              priority={true}
-              className="h-64 w-64 object-cover"
-            ></Image>
-            <h2 className="text-center text-xl font-medium">
-              {secondCharacter.data.name}
-            </h2>
-          </div>
+          {!firstCharacter.isLoading &&
+            firstCharacter.data &&
+            !secondCharacter.isLoading &&
+            secondCharacter.data &&
+            first &&
+            second && (
+              <>
+                <CharacterListing
+                  character={firstCharacter.data}
+                  vote={() => voteForCoolest(first)}
+                />
+                <div className="p-8 text-lg font-medium">Vs</div>
+                <CharacterListing
+                  character={secondCharacter.data}
+                  vote={() => voteForCoolest(second)}
+                />
+              </>
+            )}
         </div>
       </main>
     </>
+  );
+};
+
+type getAnimeCharacter = RouterOutput["getCharacter"]["getCharacters"];
+
+const CharacterListing: React.FC<{
+  character: getAnimeCharacter;
+  vote: () => void;
+}> = (props) => {
+  return (
+    <div className="flex flex-col items-center">
+      <Image
+        src={props.character.images.jpg.image_url}
+        alt="character"
+        width={400}
+        height={400}
+        priority={true}
+        className="h-64 w-64 object-cover"
+      ></Image>
+      <h2 className="mt-10 text-center text-xl font-medium">
+        {props.character.name}
+      </h2>
+      <button
+        onClick={() => props.vote}
+        className="mt-5 rounded-lg bg-emerald-500 px-3 py-1"
+      >
+        Cooler
+      </button>
+    </div>
   );
 };
 
