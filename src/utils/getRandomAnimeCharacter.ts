@@ -12,6 +12,6 @@ export const getRandomCharacter: (notThisOne?: number) => number = (
 export const getOptionsForVote = () => {
   const firstId = getRandomCharacter();
   const secondId = getRandomCharacter(firstId);
-
+  console.log(firstId, secondId)
   return [firstId, secondId];
 };

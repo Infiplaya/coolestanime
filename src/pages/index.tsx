@@ -3,17 +3,16 @@ import Head from "next/head";
 import { getOptionsForVote } from "../utils/getRandomAnimeCharacter";
 import { useState } from "react";
 import Image from "next/image";
-
 import { trpc } from "../utils/trpc";
 import type { RouterOutput } from "../server/trpc/router/_app";
 
 const Home: NextPage = () => {
-  const [ids, setIds] = useState(getOptionsForVote());
+  const [ids, setIds] = useState(() => getOptionsForVote());
   const [first, second] = ids;
 
   const firstCharacter = trpc.getCharacter.getCharacters.useQuery(
     {
-      id: first ?? null,
+      id: first!,
     },
     {
       refetchInterval: false,
@@ -23,7 +22,7 @@ const Home: NextPage = () => {
   );
   const secondCharacter = trpc.getCharacter.getCharacters.useQuery(
     {
-      id: second ?? null,
+      id: second!,
     },
     {
       refetchInterval: false,

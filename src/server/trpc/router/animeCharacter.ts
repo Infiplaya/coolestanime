@@ -14,12 +14,11 @@ const CharacterResult = z.object({
 
 export const charactersRouter = router({
     getCharacters: publicProcedure
-    .input(z.object({id: z.number().nullable()}))
+    .input(z.object({id: z.number()}))
       .query(async ({input}) => {
-        const character = await fetch(`https://api.jikan.moe/v4/characters/${input.id}`).then(res =>
+        const character = await fetch(`https://api.jikan.moe/v4/characters/${String(input.id)}`).then(res =>
         res.json());
-        const parseCharacter = CharacterResult.parse(character)
-        return parseCharacter.data
+        return {name: character.data.name, images: character.data.images}
       }),
   });
 
