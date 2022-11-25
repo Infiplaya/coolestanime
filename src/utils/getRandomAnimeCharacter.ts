@@ -1,4 +1,4 @@
-const MAX_ID = 10;
+const MAX_ID = 25;
 
 export const getRandomCharacter: (notThisOne?: number) => number = (
   notThisOne
