@@ -1,25 +1,20 @@
 import { router, publicProcedure} from "../trpc";
 import { z } from 'zod';
+import { getOptionsForVote } from "../../../utils/getRandomAnimeCharacter";
 
-const CharacterResult = z.object({
-    data: z.object({
-        name: z.string(),
-    images: z.object({
-        jpg: z.object({
-            image_url: z.string()
-        }),
-    })
-    })
-})
+
 
 export const charactersRouter = router({
-    getCharacters: publicProcedure
-    .input(z.object({id: z.number()}))
-      .query(async ({input}) => {
-        const character = await fetch(`https://api.jikan.moe/v4/characters/${String(input.id)}`).then(res =>
-        res.json());
-        return {name: character.data.name, images: character.data.images}
-      }),
+  getPair: publicProcedure.query(async ({ ctx }) => {
+    const [first, second] = getOptionsForVote();
+    try {
+        const bothCharacters = await ctx.prisma.character.findMany({
+        where: {id: {in: [first!, second!]}},
+      });
+      return {firstCharacter: bothCharacters[0], secondCharacter: bothCharacters[1]}
+    } catch (error) {
+      console.log("error", error);
+    } }),
   });
 
   export const votesRouter = router({
@@ -34,7 +29,8 @@ export const charactersRouter = router({
         try {
           await ctx.prisma.vote.create({
             data: {
-                ...input,
+                votedAgainstId: input.votedAgainst,
+                votedForId: input.votedFor,
             },
           });
         } catch (error) {

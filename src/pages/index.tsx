@@ -1,48 +1,37 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { getOptionsForVote } from "../utils/getRandomAnimeCharacter";
-import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { trpc } from "../utils/trpc";
-import type { RouterOutput } from "../server/trpc/router/_app";
 
 const Home: NextPage = () => {
-  const [ids, setIds] = useState(() => getOptionsForVote());
-  const [first, second] = ids;
-
-  const firstCharacter = trpc.getCharacter.getCharacters.useQuery(
-    {
-      id: first!,
-    },
-    {
-      refetchInterval: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-  const secondCharacter = trpc.getCharacter.getCharacters.useQuery(
-    {
-      id: second!,
-    },
-    {
-      refetchInterval: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const {
+    data: characterPair,
+    refetch,
+    isLoading,
+  } = trpc.getCharacter.getPair.useQuery();
 
   const voteMutation = trpc.getVotes.castVote.useMutation();
 
-  const voteForCoolest = (selected: number) => {
-    if (!first || !second) return;
+  const voteForRoundest = (selected: number) => {
+    if (!characterPair) return; // Early escape to make Typescript happy
 
-    if (selected === first) {
-      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    if (selected === characterPair?.firstCharacter?.id) {
+      voteMutation.mutate({
+        votedFor: characterPair.firstCharacter.id,
+        votedAgainst: characterPair.secondCharacter!.id,
+      });
     } else {
-      voteMutation.mutate({ votedFor: second, votedAgainst: first });
+      // else fire voteFor with second ID
+      voteMutation.mutate({
+        votedFor: characterPair.secondCharacter!.id,
+        votedAgainst: characterPair.firstCharacter!.id,
+      });
     }
-    setIds(getOptionsForVote());
+    refetch();
   };
+
+  const fetchingNext = voteMutation.isLoading || isLoading;
 
   return (
     <>
@@ -55,53 +44,57 @@ const Home: NextPage = () => {
         <h1 className="text-center text-3xl">
           Who is coolest anime character?{" "}
         </h1>
-        <div className="mt-10 flex items-center justify-between border-2 border-white p-20">
-          {!firstCharacter.isLoading &&
-            firstCharacter.data &&
-            !secondCharacter.isLoading &&
-            secondCharacter.data &&
-            first &&
-            second && (
-              <>
-                <CharacterListing
-                  character={firstCharacter.data}
-                  vote={() => voteForCoolest(first)}
-                />
-                <div className="p-8 text-lg font-medium">Vs</div>
-                <CharacterListing
-                  character={secondCharacter.data}
-                  vote={() => voteForCoolest(second)}
-                />
-              </>
-            )}
-        </div>
+        {characterPair && (
+          <div className="mt-10 flex items-center justify-between border-2 border-white p-20">
+            <PokemonListing
+              character={characterPair.firstCharacter}
+              vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
+              disabled={fetchingNext}
+            />
+            <div className="p-8 text-xl italic">{"or"}</div>
+            <PokemonListing
+              character={characterPair.secondCharacter}
+              vote={() => voteForRoundest(characterPair.secondCharacter!.id)}
+              disabled={fetchingNext}
+            />
+          </div>
+        )}
+
+        <Link href={`/results`}>
+          Results
+        </Link>
       </main>
     </>
   );
 };
 
-type getAnimeCharacter = RouterOutput["getCharacter"]["getCharacters"];
-
-const CharacterListing: React.FC<{
-  character: getAnimeCharacter;
+const PokemonListing: React.FC<{
+  character: any;
   vote: () => void;
+  disabled: boolean;
 }> = (props) => {
   return (
-    <div className="flex flex-col items-center">
-      <Image
-        src={props.character.images.jpg.image_url}
-        alt="character"
-        width={400}
-        height={400}
-        priority={true}
-        className="h-64 w-64 object-cover"
-      ></Image>
-      <h2 className="mt-10 text-center text-xl font-medium">
+    <div
+      className={`flex flex-col items-center transition-opacity ${
+        props.disabled && "opacity-0"
+      }`}
+      key={props.character.id}
+    >
+      <div className="mt-[-0.5rem] text-center text-xl capitalize">
         {props.character.name}
-      </h2>
+      </div>
+      <Image
+        src={props.character.imageUrl}
+        width={256}
+        height={256}
+        layout="fixed"
+        className="animate-fade-in"
+        alt="character"
+      />
       <button
+        className={`bg-emerald-500`}
         onClick={() => props.vote()}
-        className="mt-5 rounded-lg bg-emerald-500 px-3 py-1"
+        disabled={props.disabled}
       >
         Cooler
       </button>
