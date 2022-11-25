@@ -85,7 +85,6 @@ const PokemonListing: React.FC<{
         src={props.character.imageUrl}
         width={256}
         height={256}
-        layout="fixed"
         className="animate-fade-in mt-5 rounded-lg"
         alt="character"
       />
