@@ -3,6 +3,7 @@ import { prisma } from "../server/db/client";
 
 import Image from "next/image";
 import Head from "next/head";
+import { AsyncReturnType } from "../utils/ts-bs";
 
 const getCharacterInOrder = async () => {
   return await prisma.character.findMany({
@@ -23,7 +24,9 @@ const getCharacterInOrder = async () => {
   });
 };
 
-const generateCountPercent = (character: any) => {
+type CharacterQueryResult = AsyncReturnType<typeof getCharacterInOrder>;
+
+const generateCountPercent = (character: CharacterQueryResult[number]) => {
   const { VoteFor, VoteAgainst } = character._count;
   if (VoteFor + VoteAgainst === 0) {
     return 0;
@@ -31,10 +34,10 @@ const generateCountPercent = (character: any) => {
   return (VoteFor / (VoteFor + VoteAgainst)) * 100;
 };
 
-const CharacterListing: React.FC<{ character: any; rank: number }> = ({
-  character,
-  rank,
-}) => {
+const CharacterListing: React.FC<{
+  character: CharacterQueryResult[number];
+  rank: number;
+}> = ({ character, rank }) => {
   return (
     <div className="relative flex items-center justify-between border-b p-2">
       <div className="flex items-center">
@@ -60,7 +63,7 @@ const CharacterListing: React.FC<{ character: any; rank: number }> = ({
 };
 
 const ResultsPage: React.FC<{
-  character: any;
+  character: CharacterQueryResult;
 }> = (props) => {
   return (
     <div className="flex flex-col items-center">
