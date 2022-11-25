@@ -45,7 +45,7 @@ const Home: NextPage = () => {
           Who is coolest anime character?{" "}
         </h1>
         {characterPair && (
-          <div className="mt-10 flex items-center justify-between border-2 border-white p-20">
+          <div className="mt-10 flex gap-5 items-center justify-between border-2 border-emerald-700 p-20">
             <PokemonListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
@@ -60,9 +60,7 @@ const Home: NextPage = () => {
           </div>
         )}
 
-        <Link href={`/results`}>
-          Results
-        </Link>
+        <Link href={`/results`} className="text-lg mt-5">Results</Link>
       </main>
     </>
   );
@@ -80,7 +78,7 @@ const PokemonListing: React.FC<{
       }`}
       key={props.character.id}
     >
-      <div className="mt-[-0.5rem] text-center text-xl capitalize">
+      <div className="mt-[-0.5rem] text-center font-medium text-xl capitalize">
         {props.character.name}
       </div>
       <Image
@@ -88,11 +86,11 @@ const PokemonListing: React.FC<{
         width={256}
         height={256}
         layout="fixed"
-        className="animate-fade-in"
+        className="animate-fade-in mt-5 rounded-lg"
         alt="character"
       />
       <button
-        className={`bg-emerald-500`}
+        className={`mt-5 w-32 rounded-lg bg-emerald-600 px-3 py-2 font-medium`}
         onClick={() => props.vote()}
         disabled={props.disabled}
       >
