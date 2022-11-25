@@ -101,6 +101,5 @@ export default ResultsPage;
 
 export const getStaticProps: GetServerSideProps = async () => {
   const characterOrdered = await getCharacterInOrder();
-  const DAY_IN_SECONDS = 60 * 60 * 24;
-  return { props: { character: characterOrdered }, revalidate: DAY_IN_SECONDS };
+  return { props: { character: characterOrdered }, revalidate: 60 };
 };
