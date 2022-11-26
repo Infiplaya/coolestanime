@@ -48,8 +48,8 @@ const Home: NextPage = () => {
         <h1 className="text-center text-3xl">
           Who is coolest anime character?{" "}
         </h1>
-        {characterPair && (
-          <div className="mt-10 flex items-center justify-center md:gap-5 border-2 border-emerald-700 p-20">
+        {characterPair ? (
+          <div className="mt-10 flex items-center justify-center border-2 border-emerald-700 p-20 md:gap-5">
             <PokemonListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
@@ -62,6 +62,8 @@ const Home: NextPage = () => {
               disabled={fetchingNext}
             />
           </div>
+        ) : (
+          <div className="text-3xl">Loading...</div>
         )}
 
         <Link href={`/results`} className="mt-5 text-lg">
