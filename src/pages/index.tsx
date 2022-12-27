@@ -49,7 +49,7 @@ const Home: NextPage = () => {
           Who is coolest anime character?{" "}
         </h1>
         {characterPair ? (
-          <div className="mt-10 flex items-center justify-center border-2 border-emerald-700 p-20 md:gap-5">
+          <div className="mt-10 flex items-center justify-center p-20 md:gap-5">
             <PokemonListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
@@ -86,7 +86,7 @@ const PokemonListing: React.FC<{
       }`}
       key={props.character.id}
     >
-      <div className="text-center text-xl font-medium capitalize">
+      <div className="text-center text-lg md:text-3xl font-medium capitalize">
         {props.character.name}
       </div>
       <Image
