@@ -28,6 +28,7 @@ type CharacterQueryResult = AsyncReturnType<typeof getCharacterInOrder>;
 
 const generateCountPercent = (character: CharacterQueryResult[number]) => {
   const { VoteFor, VoteAgainst } = character._count;
+  console.log(character._count)
   if (VoteFor + VoteAgainst === 0) {
     return 0;
   }
@@ -46,7 +47,6 @@ const CharacterListing: React.FC<{
             src={character.imageUrl}
             width={64}
             height={64}
-            layout="fixed"
             alt="character"
           />
           <div className="pl-2 capitalize">{character.name}</div>
@@ -68,7 +68,7 @@ const ResultsPage: React.FC<{
   return (
     <div className="flex flex-col items-center">
       <Head>
-        <title>Roundest Pokemon Results</title>
+        <title>Coolest anime character</title>
       </Head>
       <h2 className="p-4 text-2xl">Results</h2>
       <div className="flex w-full max-w-2xl flex-col border">

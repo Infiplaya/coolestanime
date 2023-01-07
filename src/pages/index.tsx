@@ -50,13 +50,13 @@ const Home: NextPage = () => {
         </h1>
         {characterPair ? (
           <div className="mt-10 flex items-center justify-center p-20 md:gap-5">
-            <PokemonListing
+            <CharacterListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
               disabled={fetchingNext}
             />
             <div className="p-5 text-xl italic">{"or"}</div>
-            <PokemonListing
+            <CharacterListing
               character={characterPair.secondCharacter}
               vote={() => voteForRoundest(characterPair.secondCharacter!.id)}
               disabled={fetchingNext}
@@ -74,7 +74,7 @@ const Home: NextPage = () => {
   );
 };
 
-const PokemonListing: React.FC<{
+const CharacterListing: React.FC<{
   character: any;
   vote: () => void;
   disabled: boolean;
