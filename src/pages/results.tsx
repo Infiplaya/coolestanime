@@ -64,15 +64,15 @@ const CharacterListing: React.FC<{
 
 const ResultsPage: React.FC<{
   character: CharacterQueryResult;
-}> = (props) => {
+}> = ({character}) => {
   return (
     <div className="flex flex-col items-center">
       <Head>
         <title>Coolest anime character</title>
       </Head>
       <h2 className="p-4 text-2xl">Results</h2>
-      <div className="flex w-full max-w-2xl flex-col border">
-        {props.character
+      <ul role="list" className="divide-y divide-gray-700 md:w-1/3">
+        {character
           .sort((a, b) => {
             const difference =
               generateCountPercent(b) - generateCountPercent(a);
@@ -92,7 +92,7 @@ const ResultsPage: React.FC<{
               />
             );
           })}
-      </div>
+      </ul>
     </div>
   );
 };
