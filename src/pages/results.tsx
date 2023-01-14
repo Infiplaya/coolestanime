@@ -28,7 +28,7 @@ type CharacterQueryResult = AsyncReturnType<typeof getCharacterInOrder>;
 
 const generateCountPercent = (character: CharacterQueryResult[number]) => {
   const { VoteFor, VoteAgainst } = character._count;
-  console.log(character._count)
+  console.log(character._count);
   if (VoteFor + VoteAgainst === 0) {
     return 0;
   }
@@ -40,22 +40,30 @@ const CharacterListing: React.FC<{
   rank: number;
 }> = ({ character, rank }) => {
   return (
-    <div className="relative flex items-center justify-between border-b p-2">
+    <div className="relative flex items-center justify-between p-2">
       <div className="flex items-center">
         <div className="flex items-center pl-4">
           <Image
             src={character.imageUrl}
-            width={64}
-            height={64}
+            width={100}
+            height={100}
             alt="character"
           />
-          <div className="pl-2 capitalize">{character.name}</div>
+          <div className="text-large pl-2 font-medium capitalize">
+            {character.name}
+          </div>
         </div>
       </div>
-      <div className="pr-4">
-        {generateCountPercent(character).toFixed(2) + "%"}
+      <div className="flex flex-col gap-1 pr-4 text-gray-300">
+        <p>
+          <b>Votes for:</b> {character._count.VoteFor}
+        </p>
+        <p>
+          <b>Votes against:</b> {character._count.VoteAgainst}
+        </p>
+        <p>{generateCountPercent(character).toFixed(2) + "%"}</p>
       </div>
-      <div className="absolute top-0 left-0 z-20 flex items-center justify-center rounded-br-md border border-gray-500 bg-gray-600 px-2 font-semibold text-white shadow-lg">
+      <div className="absolute top-0 left-0 z-20 flex items-center justify-center rounded-br-md border border-emerald-500 bg-emerald-600 p-2 font-semibold text-white shadow-lg">
         {rank}
       </div>
     </div>
@@ -64,7 +72,7 @@ const CharacterListing: React.FC<{
 
 const ResultsPage: React.FC<{
   character: CharacterQueryResult;
-}> = ({character}) => {
+}> = ({ character }) => {
   return (
     <div className="flex flex-col items-center">
       <Head>
