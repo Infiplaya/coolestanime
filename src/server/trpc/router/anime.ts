@@ -4,20 +4,21 @@ import { getOptionsForVote } from "../../../utils/getRandom";
 
 
 
-export const charactersRouter = router({
-  getPair: publicProcedure.query(async ({ ctx }) => {
+export const animeRouter = router({
+  getPair: publicProcedure
+  .query(async ({ ctx }) => {
     const [first, second] = getOptionsForVote();
     try {
-        const bothCharacters = await ctx.prisma.character.findMany({
+        const bothAnimes = await ctx.prisma.anime.findMany({
         where: {id: {in: [first!, second!]}},
       });
-      return {firstCharacter: bothCharacters[0], secondCharacter: bothCharacters[1]}
+      return {firstAnime: bothAnimes[0], secondAnime: bothAnimes[1]}
     } catch (error) {
       console.log("error", error);
     } }),
   });
 
-  export const characterVotesRouter = router({
+  export const animeVotesRouter = router({
     castVote: publicProcedure
       .input(
         z.object({
@@ -27,7 +28,7 @@ export const charactersRouter = router({
       )
       .mutation(async ({ ctx, input }) => {
         try {
-          await ctx.prisma.voteCharacter.create({
+          await ctx.prisma.voteAnime.create({
             data: {
                 votedAgainstId: input.votedAgainst,
                 votedForId: input.votedFor,

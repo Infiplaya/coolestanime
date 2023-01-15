@@ -12,7 +12,7 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Vote {
+model VoteCharacter {
   id             String    @id @default(cuid())
   createdAt      DateTime  @default(now())
   votedFor       Character @relation(name: "votesFor", fields: [votedForId], references: [id])
@@ -24,10 +24,32 @@ model Vote {
   @@index([votedAgainstId])
 }
 
+model VoteAnime {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  votedForId     Int
+  votedFor       Anime @relation(name: "votesFor", fields: [votedForId], references: [id])
+  votedAgainstId Int
+  votedAgainst   Anime @relation(name: "votesAgainst", fields: [votedAgainstId], references: [id])
+  animeId        Int?
+
+
+  @@index([votedForId])
+  @@index([votedAgainstId])
+}
+
 model Character {
-  id          Int    @id
+  id          Int             @id
   name        String
   imageUrl    String
-  VoteFor     Vote[] @relation("votesFor")
-  VoteAgainst Vote[] @relation("votesAgainst")
+  VoteFor     VoteCharacter[] @relation("votesFor")
+  VoteAgainst VoteCharacter[] @relation("votesAgainst")
+}
+
+model Anime {
+  id          Int         @id
+  name        String
+  imageUrl    String
+  VoteFor     VoteAnime[] @relation("votesFor")
+  VoteAgainst VoteAnime[] @relation("votesAgainst")
 }
