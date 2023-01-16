@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
 const CharacterVotePage: NextPage = () => {
@@ -45,6 +46,12 @@ const CharacterVotePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
+        <Link
+          href="/"
+          className="absolute top-10 left-40 font-bold uppercase hover:text-gray-300"
+        >
+          Home
+        </Link>
         <h1 className="text-center text-3xl">
           Who is coolest anime character?{" "}
         </h1>
@@ -63,14 +70,14 @@ const CharacterVotePage: NextPage = () => {
             />
           </div>
         ) : (
-          <div className="text-3xl">Loading...</div>
+          <LoadingImages />
         )}
 
         <Link
           href={`/character-results`}
-          className="mt-10 text-lg hover:underline"
+          className="mt-10 text-base text-gray-100 hover:text-gray-300"
         >
-          Results Page
+          Character results
         </Link>
       </main>
     </>

@@ -11,7 +11,7 @@ const openSans = Open_Sans({ subsets: ["latin"] });
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <main className={openSans.className}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </main>
   );
 };

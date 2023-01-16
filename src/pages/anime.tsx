@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
 const AnimeVotePage: NextPage = () => {
@@ -45,9 +46,17 @@ const AnimeVotePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
-        <h1 className="text-center text-3xl">What is the coolest anime? </h1>
+        <Link
+          href="/"
+          className="absolute top-10 left-40 font-bold uppercase hover:text-gray-300"
+        >
+          Home
+        </Link>
+        <h1 className="text-center text-2xl md:text-3xl">
+          What is the coolest anime?{" "}
+        </h1>
         {animePair ? (
-          <div className="flex flex-col items-center justify-center gap-3 md:mt-20 md:flex-row md:gap-5">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:mt-20 md:flex-row md:gap-5">
             <AnimeListing
               anime={animePair.firstAnime}
               vote={() => voteForRoundest(animePair.firstAnime!.id)}
@@ -61,11 +70,13 @@ const AnimeVotePage: NextPage = () => {
             />
           </div>
         ) : (
-          <div className="text-3xl">Loading...</div>
+          <LoadingImages />
         )}
-
-        <Link href={`/anime-results`} className="mt-10 text-lg hover:underline">
-          Results Page
+        <Link
+          href={`/anime-results`}
+          className="mt-10 text-base text-gray-100 hover:text-gray-300"
+        >
+          Anime results
         </Link>
       </main>
     </>
