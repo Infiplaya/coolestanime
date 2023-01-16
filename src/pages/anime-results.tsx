@@ -48,13 +48,7 @@ const AnimeListing: React.FC<{
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-1 pr-4 text-gray-300">
-        <p>
-          <b>Votes for:</b> {anime._count.VoteFor}
-        </p>
-        <p>
-          <b>Votes against:</b> {anime._count.VoteAgainst}
-        </p>
+      <div className="text-gray-300">
         <p>{generateCountPercent(anime).toFixed(2) + "%"}</p>
       </div>
       <div className="absolute top-0 left-0 z-20 flex items-center justify-center rounded-br-md border border-emerald-500 bg-emerald-600 p-2 font-semibold text-white shadow-lg">
