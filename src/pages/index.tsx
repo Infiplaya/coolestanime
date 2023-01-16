@@ -26,7 +26,7 @@ const Home: NextPage = () => {
         Character Results
       </Link>
       <Link
-        href={`/character-results`}
+        href={`/anime-results`}
         className="mt-10 text-lg hover:underline"
       >
         Anime Results
