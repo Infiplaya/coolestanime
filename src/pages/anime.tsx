@@ -48,11 +48,11 @@ const AnimeVotePage: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
         <Link
           href="/"
-          className="absolute top-10 left-40 font-bold uppercase hover:text-gray-300"
+          className="md:absolute top-10 left-40 text-center mt-5 font-bold uppercase hover:text-gray-300"
         >
           Home
         </Link>
-        <h1 className="text-center text-2xl md:text-3xl">
+        <h1 className="hidden md:block text-center text-2xl md:text-3xl">
           What is the coolest anime?{" "}
         </h1>
         {animePair ? (

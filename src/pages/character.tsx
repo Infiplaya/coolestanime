@@ -48,7 +48,7 @@ const CharacterVotePage: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
         <Link
           href="/"
-          className="absolute top-10 left-40 font-bold uppercase hover:text-gray-300"
+          className="top-10 left-40 mt-5 text-center font-bold uppercase hover:text-gray-300 md:absolute"
         >
           Home
         </Link>

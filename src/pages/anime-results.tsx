@@ -3,7 +3,7 @@ import { prisma } from "../server/db/client";
 import Image from "next/image";
 import Head from "next/head";
 import type { AsyncReturnType } from "../utils/ts-bs";
-import Link from "next/link"
+import Link from "next/link";
 
 const getAnimeInOrder = async () => {
   return await prisma.anime.findMany({
@@ -28,7 +28,6 @@ type AnimeQueryResult = AsyncReturnType<typeof getAnimeInOrder>;
 
 const generateCountPercent = (anime: AnimeQueryResult[number]) => {
   const { VoteFor, VoteAgainst } = anime._count;
-  console.log(anime._count);
   if (VoteFor + VoteAgainst === 0) {
     return 0;
   }
@@ -67,7 +66,12 @@ const ResultsPage: React.FC<{
       <Head>
         <title>Coolest anime</title>
       </Head>
-      <Link href="/" className="absolute top-10 left-40 font-bold uppercase hover:text-gray-300">Home</Link>
+      <Link
+          href="/"
+          className="md:absolute top-10 left-40 text-center mt-5 font-bold uppercase hover:text-gray-300"
+        >
+          Home
+        </Link>
       <h2 className="p-4 text-2xl">Results</h2>
       <ul role="list" className="divide-y divide-gray-700 md:w-1/3">
         {anime
