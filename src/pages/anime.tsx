@@ -5,6 +5,13 @@ import Link from "next/link";
 import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
+function truncateName(name: string, n: number) {
+  const splitName = name.split(" ");
+  const truncated = splitName.slice(0, n).join(" ");
+
+  return truncated;
+}
+
 const AnimeVotePage: NextPage = () => {
   const {
     data: animePair,
@@ -45,18 +52,12 @@ const AnimeVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
-        <Link
-          href="/"
-          className="md:absolute top-10 left-40 text-center mt-5 font-bold uppercase hover:text-gray-300"
-        >
-          Home
-        </Link>
-        <h1 className="hidden md:block text-center text-2xl md:text-3xl">
+      <main className="mt-36 flex flex-col items-center justify-center bg-gray-900 text-gray-100">
+        <h1 className="hidden text-center text-2xl md:block md:text-3xl">
           What is the coolest anime?{" "}
         </h1>
         {animePair ? (
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:mt-20 md:flex-row md:gap-5">
+          <div className="mt-10 flex items-center justify-center gap-3 md:gap-5">
             <AnimeListing
               anime={animePair.firstAnime}
               vote={() => voteForRoundest(animePair.firstAnime!.id)}
@@ -72,12 +73,6 @@ const AnimeVotePage: NextPage = () => {
         ) : (
           <LoadingImages />
         )}
-        <Link
-          href={`/anime-results`}
-          className="mt-10 text-base text-gray-100 hover:text-gray-300"
-        >
-          Anime results
-        </Link>
       </main>
     </>
   );
@@ -96,7 +91,7 @@ const AnimeListing: React.FC<{
       key={anime.id}
     >
       <div className="text-center text-lg font-medium capitalize md:text-xl">
-        {anime.name}
+        {truncateName(anime.name, 2)}
       </div>
       <Image
         src={anime.imageUrl}

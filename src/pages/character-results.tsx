@@ -1,9 +1,8 @@
 import type { GetServerSideProps } from "next";
 import { prisma } from "../server/db/client";
-import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
-import { AsyncReturnType } from "../utils/ts-bs";
+import type { AsyncReturnType } from "../utils/ts-bs";
 
 const getCharacterInOrder = async () => {
   return await prisma.character.findMany({
@@ -78,14 +77,7 @@ const ResultsPage: React.FC<{
       <Head>
         <title>Coolest anime character</title>
       </Head>
-      <Link
-          href="/"
-          className="md:absolute top-10 left-40 text-center mt-5 font-bold uppercase hover:text-gray-300"
-        >
-          Home
-        </Link>
-      <h2 className="p-4 text-2xl">Results</h2>
-      <ul role="list" className="divide-y divide-gray-700 md:w-1/3">
+      <ul role="list" className="divide-y divide-gray-700 md:w-1/3 mt-5">
         {character
           .sort((a, b) => {
             const difference =

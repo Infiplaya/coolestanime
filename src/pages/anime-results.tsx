@@ -3,7 +3,6 @@ import { prisma } from "../server/db/client";
 import Image from "next/image";
 import Head from "next/head";
 import type { AsyncReturnType } from "../utils/ts-bs";
-import Link from "next/link";
 
 const getAnimeInOrder = async () => {
   return await prisma.anime.findMany({
@@ -42,7 +41,7 @@ const AnimeListing: React.FC<{
     <div className="relative flex items-center justify-between p-2">
       <div className="flex items-center">
         <div className="flex items-center pl-4">
-          <Image src={anime.imageUrl} width={100} height={100} alt="anime" />
+          <Image src={anime.imageUrl} width={100} height={100} alt="anime" className="w-24" />
           <div className="text-large pl-2 font-medium capitalize">
             {anime.name}
           </div>
@@ -66,14 +65,7 @@ const ResultsPage: React.FC<{
       <Head>
         <title>Coolest anime</title>
       </Head>
-      <Link
-          href="/"
-          className="md:absolute top-10 left-40 text-center mt-5 font-bold uppercase hover:text-gray-300"
-        >
-          Home
-        </Link>
-      <h2 className="p-4 text-2xl">Results</h2>
-      <ul role="list" className="divide-y divide-gray-700 md:w-1/3">
+      <ul role="list" className="divide-y divide-gray-700 md:w-1/3 mt-5">
         {anime
           .sort((a, b) => {
             const difference =

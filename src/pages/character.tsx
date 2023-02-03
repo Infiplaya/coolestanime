@@ -45,18 +45,12 @@ const CharacterVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 text-gray-100">
-        <Link
-          href="/"
-          className="top-10 left-40 mt-5 text-center font-bold uppercase hover:text-gray-300 md:absolute"
-        >
-          Home
-        </Link>
-        <h1 className="text-center text-3xl">
+      <main className="mt-36 flex flex-col items-center justify-center bg-gray-900 text-gray-100">
+        <h1 className="text-center hidden md:block text-3xl">
           Who is coolest anime character?{" "}
         </h1>
         {characterPair ? (
-          <div className="flex flex-col items-center justify-center gap-3 md:mt-20 md:flex-row md:gap-5">
+          <div className="mt-10 flex items-center justify-center gap-3 md:gap-5">
             <CharacterListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
@@ -72,13 +66,6 @@ const CharacterVotePage: NextPage = () => {
         ) : (
           <LoadingImages />
         )}
-
-        <Link
-          href={`/character-results`}
-          className="mt-10 text-base text-gray-100 hover:text-gray-300"
-        >
-          Character results
-        </Link>
       </main>
     </>
   );
@@ -91,12 +78,12 @@ const CharacterListing: React.FC<{
 }> = (props) => {
   return (
     <div
-      className={`flex flex-col items-center transition-opacity ${
+      className={`flex flex-col items-center p-2 transition-opacity ${
         props.disabled && "opacity-0"
       }`}
       key={props.character.id}
     >
-      <div className="text-center text-lg font-medium capitalize md:text-3xl">
+      <div className="text-xl text-center font-medium capitalize md:text-3xl">
         {props.character.name}
       </div>
       <Image

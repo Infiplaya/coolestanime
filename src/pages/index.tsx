@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
-    <main className="mx-auto flex h-screen max-w-7xl flex-col justify-center px-4 ">
+    <main className="mx-auto flex container flex-col sm:mt-80 mt-48 justify-center align-center">
       <div className="text-center">
         <h1 className="text-4xl font-bold tracking-tight text-gray-100 sm:text-5xl md:text-6xl">
           <span className="block xl:inline">Vote for coolest</span>{" "}
@@ -34,20 +34,6 @@ const Home: NextPage = () => {
             </Link>
           </div>
         </div>
-        <footer className="absolute bottom-20 left-0 right-0 m-auto space-x-5">
-          <Link
-            href="/anime-results"
-            className="text-base text-gray-100 hover:text-gray-300"
-          >
-            Anime Results
-          </Link>
-          <Link
-            href="/character-results"
-            className="text-base text-gray-100 hover:text-gray-300"
-          >
-            Character Results
-          </Link>
-        </footer>
       </div>
     </main>
   );
