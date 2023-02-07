@@ -1,5 +1,4 @@
 import { prisma } from "../src/server/db/client";
-import characters from "./characters.json"
 import animes from "./animes.json"
 
 async function main() {

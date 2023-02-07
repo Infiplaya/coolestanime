@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
@@ -15,7 +14,7 @@ const CharacterVotePage: NextPage = () => {
   const voteMutation = trpc.getCharacterVotes.castVote.useMutation();
 
   const voteForRoundest = (selected: number) => {
-    if (!characterPair) return; // Early escape to make Typescript happy
+    if (!characterPair) return;
 
     if (selected === characterPair?.firstCharacter?.id) {
       voteMutation.mutate({
@@ -75,19 +74,19 @@ const CharacterListing: React.FC<{
   character: any;
   vote: () => void;
   disabled: boolean;
-}> = (props) => {
+}> = ({character, vote, disabled}) => {
   return (
     <div
       className={`flex flex-col items-center p-2 transition-opacity ${
-        props.disabled && "opacity-0"
+        disabled && "opacity-0"
       }`}
-      key={props.character.id}
+      key={character.id}
     >
       <div className="text-xl text-center font-medium capitalize md:text-3xl">
-        {props.character.name}
+        {character.name}
       </div>
       <Image
-        src={props.character.imageUrl}
+        src={character.imageUrl}
         width={256}
         height={256}
         className="animate-fade-in mt-5 w-36 rounded-lg md:w-64"
@@ -96,8 +95,8 @@ const CharacterListing: React.FC<{
       <button
         className={`type="button"
         className="ml-3 focus:ring-offset-gray-800" mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
-        onClick={() => props.vote()}
-        disabled={props.disabled}
+        onClick={() => vote()}
+        disabled={disabled}
       >
         Cooler
       </button>

@@ -7,8 +7,6 @@ const navigation = [
   { name: "Home", href: "/", current: false },
   { name: "Anime results", href: "/anime-results", current: false },
   { name: "Character results", href: "/character-results", current: false },
-  { name: "Anime voting", href: "/anime", current: false },
-  { name: "Character voting", href: "/character", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -38,14 +36,14 @@ export default function Navbar() {
   }, []);
 
   return (
-    <Disclosure as="nav" className="bg-emerald-700">
+    <Disclosure as="nav" className="bg-emerald-500/10">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-100 hover:bg-emerald-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-100 hover:bg-emerald-500/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -63,8 +61,8 @@ export default function Navbar() {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? "bg-emerald-900 text-white"
-                            : "text-gray-100 hover:bg-emerald-800 hover:text-white",
+                            ? "bg-emerald-500/20 text-white"
+                            : "text-gray-100 hover:bg-emerald-500/10 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
@@ -87,8 +85,8 @@ export default function Navbar() {
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? "bg-emerald-900 text-white"
-                      : "text-gray-100 hover:bg-emerald-800 hover:text-white",
+                      ? "bg-emerald-500/20 text-white"
+                      : "text-gray-100 hover:bg-emerald-500/10 hover:text-white",
                     "block rounded-md px-3 py-2 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}

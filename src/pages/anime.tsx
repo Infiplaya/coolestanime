@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
@@ -22,7 +21,7 @@ const AnimeVotePage: NextPage = () => {
   const voteMutation = trpc.getAnimeVotes.castVote.useMutation();
 
   const voteForRoundest = (selected: number) => {
-    if (!animePair) return; // Early escape to make Typescript happy
+    if (!animePair) return;
 
     if (selected === animePair?.firstAnime?.id) {
       voteMutation.mutate({
