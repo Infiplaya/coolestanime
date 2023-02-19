@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { Loader } from "../components/Loader";
 import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
@@ -46,7 +47,7 @@ const CharacterVotePage: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {characterPair ? (
-          <div className="lg:mt-28 mt-10 flex flex-col items-center justify-center gap-3 md:gap-5">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
             <CharacterListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
@@ -60,7 +61,9 @@ const CharacterVotePage: NextPage = () => {
             />
           </div>
         ) : (
-          <LoadingImages />
+          <div className="container mx-auto flex justify-center py-64 lg:py-96">
+            <Loader />
+          </div>
         )}
       </main>
     </>

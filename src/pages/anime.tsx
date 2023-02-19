@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { Loader } from "../components/Loader";
 import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
@@ -53,13 +54,13 @@ const AnimeVotePage: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {animePair ? (
-          <div className="mt-10 lg:mt-28 flex flex-col items-center justify-center gap-3 md:gap-5">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
             <AnimeListing
               anime={animePair.firstAnime}
               vote={() => voteForRoundest(animePair.firstAnime!.id)}
               disabled={fetchingNext}
             />
-            <div className="p-5 my-10 text-xl italic">{"or"}</div>
+            <div className="my-10 p-5 text-xl italic">{"or"}</div>
             <AnimeListing
               anime={animePair.secondAnime}
               vote={() => voteForRoundest(animePair.secondAnime!.id)}
@@ -67,7 +68,9 @@ const AnimeVotePage: NextPage = () => {
             />
           </div>
         ) : (
-          <LoadingImages />
+          <div className="container mx-auto flex justify-center py-64 lg:py-96">
+            <Loader />
+          </div>
         )}
       </main>
     </>
@@ -86,7 +89,7 @@ const AnimeListing: React.FC<{
       }`}
       key={anime.id}
     >
-      <div className="text-center p-3 bg-slate-900 border border-emerald-500 rounded-lg z-10 absolute -top-6 w-full text-lg font-medium capitalize md:text-xl">
+      <div className="absolute -top-6 z-10 w-full rounded-lg border border-emerald-500 bg-slate-900 p-3 text-center text-lg font-medium capitalize md:text-xl">
         {truncateName(anime.name, 2)}
       </div>
       <Image
