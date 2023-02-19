@@ -44,18 +44,15 @@ const CharacterVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mt-36 flex flex-col items-center justify-center bg-gray-900 text-gray-100">
-        <h1 className="text-center hidden md:block text-3xl">
-          Who is coolest anime character?{" "}
-        </h1>
+      <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {characterPair ? (
-          <div className="mt-10 flex items-center justify-center gap-3 md:gap-5">
+          <div className="lg:mt-28 mt-10 flex flex-col items-center justify-center gap-3 md:gap-5">
             <CharacterListing
               character={characterPair.firstCharacter}
               vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
               disabled={fetchingNext}
             />
-            <div className="p-5 text-xl italic">{"or"}</div>
+            <div className="my-10 p-5 text-xl italic">{"or"}</div>
             <CharacterListing
               character={characterPair.secondCharacter}
               vote={() => voteForRoundest(characterPair.secondCharacter!.id)}
@@ -74,27 +71,27 @@ const CharacterListing: React.FC<{
   character: any;
   vote: () => void;
   disabled: boolean;
-}> = ({character, vote, disabled}) => {
+}> = ({ character, vote, disabled }) => {
   return (
     <div
-      className={`flex flex-col items-center p-2 transition-opacity ${
+      className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${
         disabled && "opacity-0"
       }`}
       key={character.id}
     >
-      <div className="text-xl text-center font-medium capitalize md:text-3xl">
+      <div className="absolute -top-6 z-10 w-full rounded-lg border border-emerald-500 bg-slate-900 p-3 text-center text-lg font-medium capitalize md:text-xl">
         {character.name}
       </div>
       <Image
         src={character.imageUrl}
         width={256}
         height={256}
-        className="animate-fade-in mt-5 w-36 rounded-lg md:w-64"
+        className="animate-fade-in absolute inset-0 mt-5 h-full w-full rounded-lg object-cover"
         alt="character"
       />
       <button
         className={`type="button"
-        className="ml-3 focus:ring-offset-gray-800" mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+        className="ml-3 focus:ring-offset-gray-800" absolute -bottom-12 mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
         onClick={() => vote()}
         disabled={disabled}
       >

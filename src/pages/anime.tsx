@@ -51,18 +51,15 @@ const AnimeVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mt-36 flex flex-col items-center justify-center bg-gray-900 text-gray-100">
-        <h1 className="hidden text-center text-2xl md:block md:text-3xl">
-          What is the coolest anime?{" "}
-        </h1>
+      <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {animePair ? (
-          <div className="mt-10 flex items-center justify-center gap-3 md:gap-5">
+          <div className="mt-10 lg:mt-28 flex flex-col items-center justify-center gap-3 md:gap-5">
             <AnimeListing
               anime={animePair.firstAnime}
               vote={() => voteForRoundest(animePair.firstAnime!.id)}
               disabled={fetchingNext}
             />
-            <div className="p-5 text-xl italic">{"or"}</div>
+            <div className="p-5 my-10 text-xl italic">{"or"}</div>
             <AnimeListing
               anime={animePair.secondAnime}
               vote={() => voteForRoundest(animePair.secondAnime!.id)}
@@ -84,24 +81,24 @@ const AnimeListing: React.FC<{
 }> = ({ anime, vote, disabled }) => {
   return (
     <div
-      className={`flex flex-col items-center transition-opacity ${
+      className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${
         disabled && "opacity-0"
       }`}
       key={anime.id}
     >
-      <div className="text-center text-lg font-medium capitalize md:text-xl">
+      <div className="text-center p-3 bg-slate-900 border border-emerald-500 rounded-lg z-10 absolute -top-6 w-full text-lg font-medium capitalize md:text-xl">
         {truncateName(anime.name, 2)}
       </div>
       <Image
         src={anime.imageUrl}
         width={256}
         height={256}
-        className="animate-fade-in mt-5 w-36 rounded-lg md:w-64"
+        className="animate-fade-in absolute inset-0 mt-5 h-full w-full rounded-lg object-cover"
         alt="anime"
       />
       <button
         className={`type="button"
-        className="ml-3 focus:ring-offset-gray-800" mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+        className="ml-3 focus:ring-offset-gray-800" absolute -bottom-12 mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
         onClick={() => vote()}
         disabled={disabled}
       >
