@@ -89,8 +89,8 @@ const AnimeListing: React.FC<{
       }`}
       key={anime.id}
     >
-      <div className="absolute -top-6 z-10 w-full rounded-lg border border-emerald-500 bg-slate-900 p-3 text-center text-lg font-medium capitalize md:text-xl">
-        {truncateName(anime.name, 2)}
+      <div className="absolute -top-6 z-10 rounded-lg w-64 border border-emerald-500 bg-slate-900 px-6 py-2 text-center font-medium capitalize">
+        {anime.name}
       </div>
       <Image
         src={anime.imageUrl}
