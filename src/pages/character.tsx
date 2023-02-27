@@ -34,6 +34,14 @@ const CharacterVotePage: NextPage = () => {
 
   const fetchingNext = voteMutation.isLoading || isLoading;
 
+  if (fetchingNext) {
+    return (
+      <div className="container mx-auto flex justify-center py-64 lg:py-96">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>

@@ -33,6 +33,14 @@ const AnimeVotePage: NextPage = () => {
 
   const fetchingNext = voteMutation.isLoading || isLoading;
 
+  if (fetchingNext) {
+    return (
+      <div className="container mx-auto flex justify-center py-64 lg:py-96">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -74,7 +82,7 @@ const AnimeListing: React.FC<{
   vote: () => void;
   disabled: boolean;
 }> = ({ anime, vote, disabled }) => {
-  console.log(vote)
+  console.log(vote);
   return (
     <div
       className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${

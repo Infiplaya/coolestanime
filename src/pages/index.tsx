@@ -4,7 +4,7 @@ import Link from "next/link";
 const Home: NextPage = () => {
   return (
     <main className="container mx-auto flex flex-col items-center justify-center p-5">
-      <div className="md:mt-20 flex flex-col gap-10 md:flex-row">
+      <div className="flex flex-col gap-10 md:mt-20 md:flex-row">
         <div className="w-full self-center text-center md:w-1/2">
           <h1 className="text-4xl font-bold tracking-tight text-gray-100 sm:text-5xl md:text-6xl">
             <span className="block xl:inline">Vote for coolest</span>{" "}
