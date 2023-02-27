@@ -2,15 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { Loader } from "../components/Loader";
-import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
-
-function truncateName(name: string, n: number) {
-  const splitName = name.split(" ");
-  const truncated = splitName.slice(0, n).join(" ");
-
-  return truncated;
-}
 
 const AnimeVotePage: NextPage = () => {
   const {
@@ -82,6 +74,7 @@ const AnimeListing: React.FC<{
   vote: () => void;
   disabled: boolean;
 }> = ({ anime, vote, disabled }) => {
+  console.log(vote)
   return (
     <div
       className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${
@@ -89,7 +82,7 @@ const AnimeListing: React.FC<{
       }`}
       key={anime.id}
     >
-      <div className="absolute -top-6 z-10 rounded-lg w-64 border border-emerald-500 bg-slate-900 px-6 py-2 text-center font-medium capitalize">
+      <div className="absolute -top-6 z-10 w-64 rounded-lg border border-emerald-500 bg-slate-900 px-6 py-2 text-center font-medium capitalize">
         {anime.name}
       </div>
       <Image

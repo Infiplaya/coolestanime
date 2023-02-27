@@ -41,14 +41,31 @@ const AnimeListing: React.FC<{
     <div className="relative flex items-center justify-between p-2">
       <div className="flex items-center">
         <div className="flex items-center pl-4">
-          <Image src={anime.imageUrl} width={100} height={100} alt="anime" className="w-24" />
+          <Image
+            src={anime.imageUrl}
+            width={100}
+            height={100}
+            alt="anime"
+            className="w-24"
+          />
           <div className="text-large pl-2 font-medium capitalize">
             {anime.name}
           </div>
         </div>
       </div>
       <div className="text-gray-300">
-        <p>{generateCountPercent(anime).toFixed(2) + "%"}</p>
+        <p>
+          Votes for:{" "}
+          <span className="text-lg font-semibold text-emerald-300">
+            {anime._count.VoteFor}
+          </span>
+        </p>
+        <p>
+          Votes against:{" "}
+          <span className="text-lg font-semibold text-emerald-300">
+            {anime._count.VoteAgainst}
+          </span>
+        </p>
       </div>
       <div className="absolute top-0 left-0 z-20 flex items-center justify-center rounded-br-md border border-emerald-500 bg-emerald-600 p-2 font-semibold text-white shadow-lg">
         {rank}
@@ -65,7 +82,7 @@ const ResultsPage: React.FC<{
       <Head>
         <title>Coolest anime</title>
       </Head>
-      <ul role="list" className="divide-y divide-gray-700 md:w-1/3 mt-5">
+      <ul role="list" className="mt-5 divide-y divide-gray-700 md:w-1/3">
         {anime
           .sort((a, b) => {
             const difference =

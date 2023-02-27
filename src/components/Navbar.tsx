@@ -1,40 +1,8 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-
-const navigation = [
-  { name: "Home", href: "/", current: false },
-  { name: "Anime results", href: "/anime-results", current: false },
-  { name: "Character results", href: "/character-results", current: false },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { NavLink } from "./Navlink";
 
 export default function Navbar() {
-  const [nav, setNav] = useState(navigation);
-  const { asPath } = useRouter();
-
-  useEffect(() => {
-    const nextNav = nav.map((item) => {
-      if (item.href != asPath) {
-        // No change
-        return item;
-      } else {
-        return {
-          ...item,
-          current: true,
-        };
-      }
-    });
-
-    setNav(nextNav);
-
-    return () => setNav(navigation);
-  }, []);
-
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -55,21 +23,13 @@ export default function Navbar() {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-end">
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {nav.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-emerald-500/20 text-white"
-                            : "text-gray-100 hover:bg-emerald-500/10 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    <NavLink href="/">Home</NavLink>
+                    <NavLink href="/anime">Vote Anime</NavLink>
+                    <NavLink href="/character">Vote Character</NavLink>
+                    <NavLink href="/anime-results">Anime Results</NavLink>
+                    <NavLink href="/character-results">
+                      Character Results
+                    </NavLink>
                   </div>
                 </div>
               </div>
@@ -77,23 +37,12 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              {nav.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-emerald-500/20 text-white"
-                      : "text-gray-100 hover:bg-emerald-500/10 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
+            <div className="space-y-1 flex flex-col px-2 pt-2 pb-3">
+              <NavLink href="/">Home</NavLink>
+              <NavLink href="/anime">Vote Anime</NavLink>
+              <NavLink href="/character">Vote Character</NavLink>
+              <NavLink href="/anime-results">Anime Results</NavLink>
+              <NavLink href="/character-results">Character Results</NavLink>
             </div>
           </Disclosure.Panel>
         </>
