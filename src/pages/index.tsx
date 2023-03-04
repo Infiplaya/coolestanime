@@ -13,9 +13,9 @@ const Home: NextPage = () => {
             <span className="block text-orange-600 xl:inline">Character</span>
           </h1>
           <p className="mx-auto mt-3 max-w-md text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
-            This web app is inspired by roundest by Theo, created with T3 stack.
-            In this version you can vote for coolest anime character or anime.
-            There are also results page where you can see the current ranking!
+            This web app allows you to vote for coolest anime character or anime
+            itself. There are also results page where you can see the current
+            ranking!
           </p>
           <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center md:mt-8">
             <div className="rounded-md shadow">
