@@ -1,16 +1,33 @@
-# Coolest Anime Character
+# Coolest Anime
 [Demo](https://coolestchar.vercel.app)
 
 ## What's it about?
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
-I decided to build app inspired by Roundest by Theo. Vote for a cooler anime character and see results!
+This is an fullstack app that uses Prisma as DB ORM, TRPC to create fully typesafe APIs, Nextjs as React Framework. For styling I choosed tailwind which is my favorite CSS framework. 
+I decided to build app inspired by Roundest by Theo. Vote for a cooler anime character or anime and see results!
 
-Currently there are 25 characters available, but I plan to add more of them in the future.
-I'm searching for the right API to do this. I have tried Jikan one but struggled with populating database the right way due to api requests limit. If you want to help me, contact me!
+Currently there are 100 characters and animes available.
 
-## TODO
 
-- Add more characters to database
-- Improve UI
-- Improve readme
-- more?
+## Getting Started
+
+Prerequisite:
+
+- Database provider that works with Prisma
+- npm
+
+Setup
+
+1. Clone repo
+1. `npm install`
+1. Create `.env` file if one does not already exist
+1. Connect your database with prisma
+1. Initialize database - `npx prisma migrate dev` or `npx prisma db push`
+1. Seed the database
+1. Run dev server `npm run dev`
+
+## Features
+* Users can view a list of 100 anime characters and anime series to choose from.
+* Users can vote for their favorite character or anime series by clicking on a button.
+* The results are displayed in real-time, allowing users to see which characters and anime are currently the most popular.
+* The app is fully responsive and can be used on desktop or mobile devices.
+
