@@ -1,6 +1,7 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { getOptionsForVote } from "../../../utils/getRandom";
+import { v4 as uuidv4 } from "uuid";
 
 export const animeRouter = router({
   getPair: publicProcedure.query(async ({ ctx }) => {
@@ -28,12 +29,15 @@ export const animeVotesRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.prisma.voteAnime.create({
-          data: {
+        const result = await ctx.db
+          .insertInto("VoteAnime")
+          .values({
+            id: uuidv4(),
             votedAgainstId: input.votedAgainst,
             votedForId: input.votedFor,
-          },
-        });
+          })
+          .execute();
+        return result;
       } catch (error) {
         console.log(error);
       }

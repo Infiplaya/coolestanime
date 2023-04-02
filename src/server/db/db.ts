@@ -1,13 +1,30 @@
-import type { Anime, Character, VoteCharacter } from "@prisma/client/edge";
-import { Generated, Kysely } from "kysely";
+import { Kysely, type Generated } from "kysely";
 import { PlanetScaleDialect } from "kysely-planetscale";
 
 interface VoteAnime {
   id: Generated<string>;
-  createdAt: Date;
   votedForId: number;
   votedAgainstId: number;
-  animeId: number | null;
+  createdAt: Generated<Date>;
+}
+
+interface Anime {
+  id: Generated<number>;
+  name: string;
+  imageUrl: string;
+}
+
+interface VoteCharacter {
+  id: Generated<string>;
+  votedForId: number;
+  votedAgainstId: number;
+  createdAt: Generated<Date>;
+}
+
+interface Character {
+  id: Generated<number>;
+  name: string;
+  imageUrl: string;
 }
 
 interface Database {
