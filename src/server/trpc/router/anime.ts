@@ -2,15 +2,10 @@ import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { getOptionsForVote } from "../../../utils/getRandom";
 
-
 export const animeRouter = router({
   getPair: publicProcedure.query(async ({ ctx }) => {
     const [first, second] = getOptionsForVote();
     try {
-      // const bothAnimes = await ctx.prisma.anime.findMany({
-      //   where: { id: { in: [first as number, second as number] } },
-      // });
-
       const bothAnimes = await ctx.db
         .selectFrom("Anime")
         .selectAll()
