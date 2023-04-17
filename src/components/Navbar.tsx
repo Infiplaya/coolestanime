@@ -20,10 +20,10 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-end">
+              <div className="flex flex-1 sm:items-stretch px-6 sm:justify-between">
+                <NavLink href="/">Home</NavLink>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    <NavLink href="/">Home</NavLink>
                     <NavLink href="/anime">Vote Anime</NavLink>
                     <NavLink href="/character">Vote Character</NavLink>
                     <NavLink href="/anime-results">Anime Results</NavLink>
@@ -37,7 +37,7 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 flex flex-col px-2 pt-2 pb-3">
+            <div className="flex flex-col space-y-1 px-2 pt-2 pb-3">
               <NavLink href="/">Home</NavLink>
               <NavLink href="/anime">Vote Anime</NavLink>
               <NavLink href="/character">Vote Character</NavLink>

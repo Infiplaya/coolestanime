@@ -1,37 +1,49 @@
 import type { GetServerSideProps } from "next";
-import { prisma } from "../server/db/client";
 import Image from "next/image";
 import Head from "next/head";
-import type { AsyncReturnType } from "../utils/ts-bs";
+import { db } from "../server/db/db";
+
+const { count } = db.fn;
+
+interface AnimeResult {
+  id: number;
+  name: string;
+  imageUrl: string;
+  VoteFor: number;
+  VoteAgainst: number;
+}
+[];
 
 const getAnimeInOrder = async () => {
-  return await prisma.anime.findMany({
-    orderBy: {
-      VoteFor: { _count: "desc" },
-    },
-    select: {
-      id: true,
-      name: true,
-      imageUrl: true,
-      _count: {
-        select: {
-          VoteFor: true,
-          VoteAgainst: true,
-        },
-      },
-    },
-  });
-};
+  const query1 = await db
+    .selectFrom("Anime")
+    .leftJoin("VoteAnime", "Anime.id", "votedForId")
+    .select([
+      "Anime.id",
+      "Anime.name",
+      "Anime.imageUrl",
+      count("VoteAnime.votedForId").as("VoteFor"),
+    ])
+    .groupBy("Anime.id")
+    .execute();
 
-type AnimeQueryResult = AsyncReturnType<typeof getAnimeInOrder>;
+  const query2 = await db
+    .selectFrom("Anime")
+    .leftJoin("VoteAnime", "Anime.id", "votedAgainstId")
+    .select(["Anime.id", count("VoteAnime.votedAgainstId").as("VoteAgainst")])
+    .groupBy("Anime.id")
+    .execute();
 
-const generateCountPercent = (anime: AnimeQueryResult[number]) => {
-  const { VoteFor, VoteAgainst } = anime._count;
-  if (VoteFor + VoteAgainst === 0) {
-    return 0;
+  const final: AnimeResult[] | undefined = [];
+
+  for (let i = 0; i < 100; i++) {
+    query1[i].VoteAgainst = query2[i].VoteAgainst;
   }
-  return (VoteFor / (VoteFor + VoteAgainst)) * 100;
+
+  return query1;
 };
+
+type AnimeQueryResult = AnimeResult[];
 
 const AnimeListing: React.FC<{
   anime: AnimeQueryResult[number];
@@ -57,13 +69,13 @@ const AnimeListing: React.FC<{
         <p>
           Votes for:{" "}
           <span className="text-lg font-semibold text-emerald-300">
-            {anime._count.VoteFor}
+            {anime.VoteFor}
           </span>
         </p>
         <p>
           Votes against:{" "}
           <span className="text-lg font-semibold text-emerald-300">
-            {anime._count.VoteAgainst}
+            {anime.VoteAgainst}
           </span>
         </p>
       </div>
@@ -85,14 +97,7 @@ const ResultsPage: React.FC<{
       <ul role="list" className="mt-5 divide-y divide-gray-700 md:w-1/3">
         {anime
           .sort((a, b) => {
-            const difference =
-              generateCountPercent(b) - generateCountPercent(a);
-
-            if (difference === 0) {
-              return b._count.VoteFor - a._count.VoteFor;
-            }
-
-            return difference;
+            return b.VoteFor - a.VoteFor;
           })
           .map((currentAnime, index) => {
             return (

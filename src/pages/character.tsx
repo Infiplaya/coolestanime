@@ -54,19 +54,27 @@ const CharacterVotePage: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {characterPair ? (
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
-            <CharacterListing
-              character={characterPair.firstCharacter}
-              vote={() => voteForCharacter(characterPair.firstCharacter!.id)}
-              disabled={fetchingNext}
-            />
-            <div className="my-10 p-5 text-xl italic">{"or"}</div>
-            <CharacterListing
-              character={characterPair.secondCharacter}
-              vote={() => voteForCharacter(characterPair.secondCharacter!.id)}
-              disabled={fetchingNext}
-            />
-          </div>
+          <>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-64 lg:flex-row lg:gap-20">
+              <CharacterListing
+                character={characterPair.firstCharacter}
+                vote={() => voteForCharacter(characterPair.firstCharacter!.id)}
+                disabled={fetchingNext}
+              />
+              <div className="my-10 p-5 text-2xl font-semibold">{"VS"}</div>
+              <CharacterListing
+                character={characterPair.secondCharacter}
+                vote={() => voteForCharacter(characterPair.secondCharacter!.id)}
+                disabled={fetchingNext}
+              />
+            </div>
+            <button
+              className="rounded-md border border-emerald-500 px-6 py-3 mt-20"
+              onClick={() => refetch()}
+            >
+              Skip this vote
+            </button>
+          </>
         ) : (
           <div className="container mx-auto flex justify-center py-64 lg:py-96">
             <Loader />

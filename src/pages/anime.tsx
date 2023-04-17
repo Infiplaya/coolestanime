@@ -1,3 +1,4 @@
+import { Anime } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -14,8 +15,7 @@ const AnimeVotePage: NextPage = () => {
   const voteMutation = trpc.getAnimeVotes.castVote.useMutation();
 
   const voteForAnime = (selected: number) => {
-    if (!animePair?.firstAnime || !animePair.secondAnime)
-      return null;
+    if (!animePair?.firstAnime || !animePair.secondAnime) return null;
 
     if (selected === animePair?.firstAnime?.id) {
       voteMutation.mutate({
@@ -55,13 +55,13 @@ const AnimeVotePage: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {animePair ? (
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-64 lg:flex-row lg:gap-20">
             <AnimeListing
               anime={animePair.firstAnime}
               vote={() => voteForAnime(animePair.firstAnime!.id)}
               disabled={fetchingNext}
             />
-            <div className="my-10 p-5 text-xl italic">{"or"}</div>
+            <div className="my-10 p-5 text-2xl">{"VS"}</div>
             <AnimeListing
               anime={animePair.secondAnime}
               vote={() => voteForAnime(animePair.secondAnime!.id)}
@@ -89,10 +89,10 @@ const AnimeListing: React.FC<{
       className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${
         disabled && "opacity-0"
       }`}
-      key={anime.id}
+      key={anime?.id}
     >
       <div className="absolute -top-6 z-10 w-64 rounded-lg border border-emerald-500 bg-slate-900 px-6 py-2 text-center font-medium capitalize">
-        {anime.name}
+        {anime?.name}
       </div>
       <Image
         src={anime.imageUrl}
@@ -103,7 +103,7 @@ const AnimeListing: React.FC<{
       />
       <button
         className={`type="button"
-        className="ml-3 focus:ring-offset-gray-800" absolute -bottom-12 mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+        className="ml-3 absolute -bottom-12 mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-800`}
         onClick={() => vote()}
         disabled={disabled}
       >

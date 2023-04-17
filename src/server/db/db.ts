@@ -8,7 +8,7 @@ interface VoteAnime {
   createdAt: Generated<Date>;
 }
 
-interface Anime {
+export interface Anime {
   id: Generated<number>;
   name: string;
   imageUrl: string;
