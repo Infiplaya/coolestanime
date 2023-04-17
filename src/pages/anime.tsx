@@ -13,19 +13,20 @@ const AnimeVotePage: NextPage = () => {
 
   const voteMutation = trpc.getAnimeVotes.castVote.useMutation();
 
-  const voteForRoundest = (selected: number) => {
-    if (!animePair) return;
+  const voteForAnime = (selected: number) => {
+    if (!animePair?.firstAnime || !animePair.secondAnime)
+      return null;
 
     if (selected === animePair?.firstAnime?.id) {
       voteMutation.mutate({
         votedFor: animePair.firstAnime.id,
-        votedAgainst: animePair.secondAnime!.id,
+        votedAgainst: animePair.secondAnime.id,
       });
     } else {
       // else fire voteFor with second ID
       voteMutation.mutate({
-        votedFor: animePair.secondAnime!.id,
-        votedAgainst: animePair.firstAnime!.id,
+        votedFor: animePair.secondAnime.id,
+        votedAgainst: animePair.firstAnime.id,
       });
     }
     refetch();
@@ -57,13 +58,13 @@ const AnimeVotePage: NextPage = () => {
           <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
             <AnimeListing
               anime={animePair.firstAnime}
-              vote={() => voteForRoundest(animePair.firstAnime!.id)}
+              vote={() => voteForAnime(animePair.firstAnime!.id)}
               disabled={fetchingNext}
             />
             <div className="my-10 p-5 text-xl italic">{"or"}</div>
             <AnimeListing
               anime={animePair.secondAnime}
-              vote={() => voteForRoundest(animePair.secondAnime!.id)}
+              vote={() => voteForAnime(animePair.secondAnime!.id)}
               disabled={fetchingNext}
             />
           </div>

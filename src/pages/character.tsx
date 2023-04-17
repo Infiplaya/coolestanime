@@ -2,7 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { Loader } from "../components/Loader";
-import { LoadingImages } from "../components/LoadingImages";
 import { trpc } from "../utils/trpc";
 
 const CharacterVotePage: NextPage = () => {
@@ -14,19 +13,19 @@ const CharacterVotePage: NextPage = () => {
 
   const voteMutation = trpc.getCharacterVotes.castVote.useMutation();
 
-  const voteForRoundest = (selected: number) => {
-    if (!characterPair) return;
+  const voteForCharacter = (selected: number) => {
+    if (!characterPair?.firstCharacter || !characterPair.secondCharacter)
+      return null;
 
-    if (selected === characterPair?.firstCharacter?.id) {
+    if (selected === characterPair.firstCharacter.id) {
       voteMutation.mutate({
         votedFor: characterPair.firstCharacter.id,
-        votedAgainst: characterPair.secondCharacter!.id,
+        votedAgainst: characterPair.secondCharacter.id,
       });
     } else {
-      // else fire voteFor with second ID
       voteMutation.mutate({
-        votedFor: characterPair.secondCharacter!.id,
-        votedAgainst: characterPair.firstCharacter!.id,
+        votedFor: characterPair.secondCharacter.id,
+        votedAgainst: characterPair.firstCharacter.id,
       });
     }
     refetch();
@@ -58,13 +57,13 @@ const CharacterVotePage: NextPage = () => {
           <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-28">
             <CharacterListing
               character={characterPair.firstCharacter}
-              vote={() => voteForRoundest(characterPair.firstCharacter!.id)}
+              vote={() => voteForCharacter(characterPair.firstCharacter!.id)}
               disabled={fetchingNext}
             />
             <div className="my-10 p-5 text-xl italic">{"or"}</div>
             <CharacterListing
               character={characterPair.secondCharacter}
-              vote={() => voteForRoundest(characterPair.secondCharacter!.id)}
+              vote={() => voteForCharacter(characterPair.secondCharacter!.id)}
               disabled={fetchingNext}
             />
           </div>
