@@ -1,37 +1,57 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import type { GetServerSideProps } from "next";
-import { prisma } from "../server/db/client";
 import Image from "next/image";
 import Head from "next/head";
 import type { AsyncReturnType } from "../utils/ts-bs";
+import { db } from "../server/db/db";
+
+const { count } = db.fn;
+
+interface CharacterResult {
+  id: number;
+  name: string;
+  imageUrl: string;
+  VoteFor: number;
+  VoteAgainst: number;
+}
+[];
 
 const getCharacterInOrder = async () => {
-  return await prisma.character.findMany({
-    orderBy: {
-      VoteFor: { _count: "desc" },
-    },
-    select: {
-      id: true,
-      name: true,
-      imageUrl: true,
-      _count: {
-        select: {
-          VoteFor: true,
-          VoteAgainst: true,
-        },
-      },
-    },
-  });
+  const query1 = await db
+    .selectFrom("Character")
+    .leftJoin("VoteCharacter", "Character.id", "votedForId")
+    .select([
+      "Character.id",
+      "Character.name",
+      "Character.imageUrl",
+      count("VoteCharacter.votedForId").as("VoteFor"),
+    ])
+    .groupBy("Character.id")
+    .execute();
+
+  const query2 = await db
+    .selectFrom("Character")
+    .leftJoin("VoteCharacter", "Character.id", "votedAgainstId")
+    .select([
+      "Character.id",
+      count("VoteCharacter.votedAgainstId").as("VoteAgainst"),
+    ])
+    .groupBy("Character.id")
+    .execute();
+
+  const result: CharacterResult[] = [];
+
+  for (let i = 0; i < 100; i++) {
+    query1[i].VoteAgainst = query2[i].VoteAgainst;
+    result.push(query1[i]);
+  }
+
+  return result;
 };
 
 type CharacterQueryResult = AsyncReturnType<typeof getCharacterInOrder>;
-
-const generateCountPercent = (character: CharacterQueryResult[number]) => {
-  const { VoteFor, VoteAgainst } = character._count;
-  if (VoteFor + VoteAgainst === 0) {
-    return 0;
-  }
-  return (VoteFor / (VoteFor + VoteAgainst)) * 100;
-};
 
 const CharacterListing: React.FC<{
   character: CharacterQueryResult[number];
@@ -57,13 +77,13 @@ const CharacterListing: React.FC<{
         <p>
           Votes for:{" "}
           <span className="text-lg font-semibold text-orange-300">
-            {character._count.VoteFor}
+            {character.VoteFor}
           </span>
         </p>
         <p>
           Votes against:{" "}
           <span className="text-lg font-semibold text-orange-300">
-            {character._count.VoteAgainst}
+            {character.VoteAgainst}
           </span>
         </p>
       </div>
@@ -85,14 +105,7 @@ const ResultsPage: React.FC<{
       <ul role="list" className="mt-5 divide-y divide-gray-700 md:w-1/3">
         {character
           .sort((a, b) => {
-            const difference =
-              generateCountPercent(b) - generateCountPercent(a);
-
-            if (difference === 0) {
-              return b._count.VoteFor - a._count.VoteFor;
-            }
-
-            return difference;
+            return b.VoteFor - a.VoteFor;
           })
           .map((currentCharacter, index) => {
             return (

@@ -1,4 +1,3 @@
-import { Anime } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -55,19 +54,27 @@ const AnimeVotePage: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
         {animePair ? (
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-64 lg:flex-row lg:gap-20">
-            <AnimeListing
-              anime={animePair.firstAnime}
-              vote={() => voteForAnime(animePair.firstAnime!.id)}
-              disabled={fetchingNext}
-            />
-            <div className="my-10 p-5 text-2xl">{"VS"}</div>
-            <AnimeListing
-              anime={animePair.secondAnime}
-              vote={() => voteForAnime(animePair.secondAnime!.id)}
-              disabled={fetchingNext}
-            />
-          </div>
+          <>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-64 lg:flex-row lg:gap-20">
+              <AnimeListing
+                anime={animePair.firstAnime}
+                vote={() => voteForAnime(animePair.firstAnime!.id)}
+                disabled={fetchingNext}
+              />
+              <div className="my-10 p-5 text-2xl">{"VS"}</div>
+              <AnimeListing
+                anime={animePair.secondAnime}
+                vote={() => voteForAnime(animePair.secondAnime!.id)}
+                disabled={fetchingNext}
+              />
+            </div>
+            <button
+              className="mt-20 rounded-md border border-emerald-500 px-6 py-3"
+              onClick={() => refetch()}
+            >
+              Skip this vote
+            </button>
+          </>
         ) : (
           <div className="container mx-auto flex justify-center py-64 lg:py-96">
             <Loader />

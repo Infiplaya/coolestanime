@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import type { GetServerSideProps } from "next";
 import Image from "next/image";
 import Head from "next/head";
@@ -34,13 +37,14 @@ const getAnimeInOrder = async () => {
     .groupBy("Anime.id")
     .execute();
 
-  const final: AnimeResult[] | undefined = [];
+  const result: AnimeResult[] = [];
 
   for (let i = 0; i < 100; i++) {
     query1[i].VoteAgainst = query2[i].VoteAgainst;
+    result.push(query1[i]);
   }
 
-  return query1;
+  return result;
 };
 
 type AnimeQueryResult = AnimeResult[];

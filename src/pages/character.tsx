@@ -69,7 +69,7 @@ const CharacterVotePage: NextPage = () => {
               />
             </div>
             <button
-              className="rounded-md border border-emerald-500 px-6 py-3 mt-20"
+              className="mt-20 rounded-md border border-emerald-500 px-6 py-3"
               onClick={() => refetch()}
             >
               Skip this vote
