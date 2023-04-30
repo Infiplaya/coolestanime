@@ -10,7 +10,9 @@ const AnimeVotePage: NextPage = () => {
     data: animePair,
     refetch,
     isLoading,
-  } = trpc.getAnime.getPair.useQuery();
+  } = trpc.getAnime.getPair.useQuery(undefined, {
+    keepPreviousData: true,
+  });
 
   const voteMutation = trpc.getAnimeVotes.castVote.useMutation();
 
@@ -32,16 +34,6 @@ const AnimeVotePage: NextPage = () => {
     refetch();
   };
 
-  const fetchingNext = voteMutation.isLoading || isLoading;
-
-  if (fetchingNext) {
-    return (
-      <div className="container mx-auto flex justify-center py-64 lg:py-96">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
@@ -53,31 +45,42 @@ const AnimeVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mx-auto flex max-w-3xl flex-col items-center justify-center py-10 md:flex-row md:gap-10 md:py-32">
-        {animePair ? (
-          <>
-            {animePair.firstAnime && (
-              <AnimeListing
-                anime={animePair.firstAnime}
-                vote={() => voteForAnime(animePair.firstAnime!.id)}
-                disabled={fetchingNext}
-              />
+      <>
+        <main className="mx-auto flex max-w-3xl flex-col-reverse items-center py-10 md:flex-col md:py-32">
+          <div className="mx-auto flex max-w-3xl flex-col items-center justify-center md:flex-row md:gap-10">
+            {animePair ? (
+              <>
+                {animePair.firstAnime && (
+                  <AnimeListing
+                    anime={animePair.firstAnime}
+                    vote={() => voteForAnime(animePair.firstAnime!.id)}
+                    disabled={isLoading}
+                  />
+                )}
+                <div className="my-5 lg:text-2xl">{"VS"}</div>
+                {animePair.secondAnime && (
+                  <AnimeListing
+                    anime={animePair.secondAnime}
+                    vote={() => voteForAnime(animePair.secondAnime!.id)}
+                    disabled={isLoading}
+                  />
+                )}
+              </>
+            ) : (
+              <div className="container mx-auto flex justify-center py-64 lg:py-96">
+                <Loader />
+              </div>
             )}
-            <div className="my-5 lg:text-2xl">{"VS"}</div>
-            {animePair.secondAnime && (
-              <AnimeListing
-                anime={animePair.secondAnime}
-                vote={() => voteForAnime(animePair.secondAnime!.id)}
-                disabled={fetchingNext}
-              />
-            )}
-          </>
-        ) : (
-          <div className="container mx-auto flex justify-center py-64 lg:py-96">
-            <Loader />
           </div>
-        )}
-      </main>
+
+          <button
+            className="mb-5 rounded-md border border-emerald-500 px-4 py-2 md:mt-10"
+            onClick={() => refetch()}
+          >
+            Skip this vote
+          </button>
+        </main>
+      </>
     </>
   );
 };

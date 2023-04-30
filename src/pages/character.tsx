@@ -1,4 +1,4 @@
-import { Character } from "@prisma/client";
+import type { Character } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -10,7 +10,9 @@ const CharacterVotePage: NextPage = () => {
     data: characterPair,
     refetch,
     isLoading,
-  } = trpc.getCharacter.getPair.useQuery();
+  } = trpc.getCharacter.getPair.useQuery(undefined, {
+    keepPreviousData: true,
+  });
 
   const voteMutation = trpc.getCharacterVotes.castVote.useMutation();
 
@@ -32,16 +34,6 @@ const CharacterVotePage: NextPage = () => {
     refetch();
   };
 
-  const fetchingNext = voteMutation.isLoading || isLoading;
-
-  if (fetchingNext) {
-    return (
-      <div className="container mx-auto flex justify-center py-64 lg:py-96">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
@@ -53,30 +45,43 @@ const CharacterVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mx-auto flex max-w-3xl flex-col items-center justify-center py-10 md:flex-row md:gap-10 md:py-32">
-        {characterPair ? (
-          <>
-            {characterPair.firstCharacter && (
-              <CharacterListing
-                character={characterPair.firstCharacter}
-                vote={() => voteForCharacter(characterPair.firstCharacter!.id)}
-                disabled={fetchingNext}
-              />
-            )}
-            <div className="my-5 lg:text-2xl">{"VS"}</div>
-            {characterPair.secondCharacter && (
-              <CharacterListing
-                character={characterPair.secondCharacter}
-                vote={() => voteForCharacter(characterPair.secondCharacter!.id)}
-                disabled={fetchingNext}
-              />
-            )}
-          </>
-        ) : (
-          <div className="container mx-auto flex justify-center py-64 lg:py-96">
-            <Loader />
-          </div>
-        )}
+      <main className="mx-auto flex max-w-3xl flex-col-reverse items-center py-10 md:flex-col md:py-32">
+        <div className="mx-auto flex max-w-3xl flex-col items-center justify-center md:flex-row md:gap-10">
+          {characterPair ? (
+            <>
+              {characterPair.firstCharacter && (
+                <CharacterListing
+                  character={characterPair.firstCharacter}
+                  vote={() =>
+                    voteForCharacter(characterPair.firstCharacter!.id)
+                  }
+                  disabled={isLoading}
+                />
+              )}
+              <div className="my-5 lg:text-2xl">{"VS"}</div>
+              {characterPair.secondCharacter && (
+                <CharacterListing
+                  character={characterPair.secondCharacter}
+                  vote={() =>
+                    voteForCharacter(characterPair.secondCharacter!.id)
+                  }
+                  disabled={isLoading}
+                />
+              )}
+            </>
+          ) : (
+            <div className="container mx-auto flex justify-center py-64 lg:py-96">
+              <Loader />
+            </div>
+          )}
+        </div>
+
+        <button
+          className="mb-5 rounded-md border border-emerald-500 px-4 py-2 md:mt-10"
+          onClick={() => refetch()}
+        >
+          Skip this vote
+        </button>
       </main>
     </>
   );
