@@ -1,13 +1,20 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { getOptionsForVote } from "../../../utils/getRandom";
+import { TRPCError } from "@trpc/server";
 
 export const charactersRouter = router({
   getPair: publicProcedure.query(async ({ ctx }) => {
     const [first, second] = getOptionsForVote();
+    if (!first || !second) {
+      throw new TRPCError({
+        message: "Missing options for vote",
+        code: "BAD_REQUEST",
+      });
+    }
     try {
       const bothCharacters = await ctx.prisma.character.findMany({
-        where: { id: { in: [first!, second!] } },
+        where: { id: { in: [first, second] } },
       });
       return {
         firstCharacter: bothCharacters[0],

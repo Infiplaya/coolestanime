@@ -1,8 +1,7 @@
-import type { Anime } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { Loader } from "../components/Loader";
+import VoteCard from "../components/VoteCard";
 import { trpc } from "../utils/trpc";
 
 const AnimeVotePage: NextPage = () => {
@@ -51,16 +50,16 @@ const AnimeVotePage: NextPage = () => {
             {animePair ? (
               <>
                 {animePair.firstAnime && (
-                  <AnimeListing
-                    anime={animePair.firstAnime}
+                  <VoteCard
+                    voteItem={animePair.firstAnime}
                     vote={() => voteForAnime(animePair.firstAnime!.id)}
                     disabled={isLoading}
                   />
                 )}
                 <div className="my-5 lg:text-2xl">{"VS"}</div>
                 {animePair.secondAnime && (
-                  <AnimeListing
-                    anime={animePair.secondAnime}
+                  <VoteCard
+                    voteItem={animePair.secondAnime}
                     vote={() => voteForAnime(animePair.secondAnime!.id)}
                     disabled={isLoading}
                   />
@@ -82,42 +81,6 @@ const AnimeVotePage: NextPage = () => {
         </main>
       </>
     </>
-  );
-};
-
-const AnimeListing: React.FC<{
-  anime: Anime;
-  vote: () => void;
-  disabled: boolean;
-}> = ({ anime, vote, disabled }) => {
-  console.log(vote);
-  return (
-    <div
-      key={anime?.id}
-      className="flex flex-col items-center gap-5 rounded-md border border-emerald-900"
-    >
-      <Image
-        src={anime.imageUrl}
-        width={225}
-        height={318}
-        alt="anime"
-        loading="lazy"
-        priority={true}
-        className="h-[318px] w-[225px]"
-      />
-      <div className="flex flex-col items-center gap-2 px-3 py-2">
-        <h3 className="line-clamp-1 max-w-[200px] px-3 text-lg">
-          {anime?.name}
-        </h3>
-        <button
-          onClick={vote}
-          disabled={disabled}
-          className="rounded-md bg-emerald-600 px-4 py-1 transition-colors hover:bg-emerald-500"
-        >
-          Cooler
-        </button>
-      </div>
-    </div>
   );
 };
 
