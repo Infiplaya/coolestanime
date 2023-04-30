@@ -13,7 +13,7 @@ export default function VoteCard({
   return (
     <div
       key={voteItem?.id}
-      className="flex flex-col items-center gap-5 rounded-md border border-emerald-900"
+      className="flex flex-col items-center gap-2 rounded-md border border-emerald-900"
     >
       <Image
         src={voteItem?.imageUrl}
