@@ -45,7 +45,7 @@ const CharacterVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <VoteLayout>
+      <VoteLayout refetch={refetch}>
         {characterPair ? (
           <>
             {characterPair.firstCharacter && (
@@ -69,13 +69,6 @@ const CharacterVotePage: NextPage = () => {
             <Loader />
           </div>
         )}
-
-        <button
-          className="mb-5 rounded-md border border-emerald-500 px-4 py-2 md:mt-10"
-          onClick={() => refetch()}
-        >
-          Skip this vote
-        </button>
       </VoteLayout>
     </>
   );
