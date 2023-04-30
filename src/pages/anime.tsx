@@ -1,3 +1,4 @@
+import type { Anime } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -52,28 +53,24 @@ const AnimeVotePage: NextPage = () => {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex flex-col items-center justify-center bg-gray-900 text-gray-100">
+      <main className="mx-auto flex max-w-3xl flex-col items-center justify-center py-10 md:flex-row md:gap-10 md:py-32">
         {animePair ? (
           <>
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 md:gap-5 lg:mt-64 lg:flex-row lg:gap-20">
+            {animePair.firstAnime && (
               <AnimeListing
                 anime={animePair.firstAnime}
                 vote={() => voteForAnime(animePair.firstAnime!.id)}
                 disabled={fetchingNext}
               />
-              <div className="my-10 p-5 text-2xl">{"VS"}</div>
+            )}
+            <div className="my-5 lg:text-2xl">{"VS"}</div>
+            {animePair.secondAnime && (
               <AnimeListing
                 anime={animePair.secondAnime}
                 vote={() => voteForAnime(animePair.secondAnime!.id)}
                 disabled={fetchingNext}
               />
-            </div>
-            <button
-              className="mt-20 rounded-md border border-emerald-500 px-6 py-3"
-              onClick={() => refetch()}
-            >
-              Skip this vote
-            </button>
+            )}
           </>
         ) : (
           <div className="container mx-auto flex justify-center py-64 lg:py-96">
@@ -86,36 +83,35 @@ const AnimeVotePage: NextPage = () => {
 };
 
 const AnimeListing: React.FC<{
-  anime: any;
+  anime: Anime;
   vote: () => void;
   disabled: boolean;
 }> = ({ anime, vote, disabled }) => {
   console.log(vote);
   return (
     <div
-      className={`relative flex h-64  w-48 flex-col items-center transition-opacity ${
-        disabled && "opacity-0"
-      }`}
       key={anime?.id}
+      className="flex flex-col items-center gap-5 rounded-md border border-emerald-900"
     >
-      <div className="absolute -top-6 z-10 w-64 rounded-lg border border-emerald-500 bg-slate-900 px-6 py-2 text-center font-medium capitalize">
-        {anime?.name}
-      </div>
       <Image
         src={anime.imageUrl}
-        width={256}
-        height={256}
-        className="animate-fade-in absolute inset-0 mt-5 h-full w-full rounded-lg object-cover"
+        width={225}
+        height={318}
         alt="anime"
+        className="h-[318px] w-[225px]"
       />
-      <button
-        className={`type="button"
-        className="ml-3 absolute -bottom-12 mt-5 inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-800`}
-        onClick={() => vote()}
-        disabled={disabled}
-      >
-        Cooler
-      </button>
+      <div className="flex flex-col items-center gap-2 px-3 py-2">
+        <h3 className="line-clamp-1 max-w-[200px] px-3 text-lg">
+          {anime?.name}
+        </h3>
+        <button
+          onClick={vote}
+          disabled={disabled}
+          className="rounded-md bg-emerald-600 px-4 py-1 transition-colors hover:bg-emerald-500"
+        >
+          Cooler
+        </button>
+      </div>
     </div>
   );
 };

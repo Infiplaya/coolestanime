@@ -20,7 +20,7 @@ export default function Navbar() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 sm:items-stretch px-6 sm:justify-between">
+              <div className="flex flex-1 px-6 sm:items-stretch sm:justify-between">
                 <NavLink href="/">Home</NavLink>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

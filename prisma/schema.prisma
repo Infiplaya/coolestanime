@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model VoteCharacter {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  votedFor       Character @relation(name: "votesFor", fields: [votedForId], references: [id])
+  votedForId     Int
+  votedAgainst   Character @relation(name: "votesAgainst", fields: [votedAgainstId], references: [id])
+  votedAgainstId Int
+
+  @@index([votedForId])
+  @@index([votedAgainstId])
+}
+
+model VoteAnime {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  votedForId     Int
+  votedFor       Anime    @relation(name: "votesFor", fields: [votedForId], references: [id])
+  votedAgainstId Int
+  votedAgainst   Anime    @relation(name: "votesAgainst", fields: [votedAgainstId], references: [id])
+  animeId        Int?
+
+  @@index([votedForId])
+  @@index([votedAgainstId])
+}
+
+model Character {
+  id          Int             @id
+  name        String
+  imageUrl    String
+  VoteFor     VoteCharacter[] @relation("votesFor")
+  VoteAgainst VoteCharacter[] @relation("votesAgainst")
+}
+
+model Anime {
+  id          Int         @id
+  name        String
+  imageUrl    String
+  VoteFor     VoteAnime[] @relation("votesFor")
+  VoteAgainst VoteAnime[] @relation("votesAgainst")
+}

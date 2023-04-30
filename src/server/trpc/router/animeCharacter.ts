@@ -1,17 +1,14 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { getOptionsForVote } from "../../../utils/getRandom";
-import { v4 as uuidv4 } from "uuid";
 
 export const charactersRouter = router({
   getPair: publicProcedure.query(async ({ ctx }) => {
     const [first, second] = getOptionsForVote();
     try {
-      const bothCharacters = await ctx.db
-        .selectFrom("Character")
-        .selectAll()
-        .where("id", "in", [first as number, second as number])
-        .execute();
+      const bothCharacters = await ctx.prisma.character.findMany({
+        where: { id: { in: [first!, second!] } },
+      });
       return {
         firstCharacter: bothCharacters[0],
         secondCharacter: bothCharacters[1],
@@ -32,15 +29,12 @@ export const characterVotesRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const result = await ctx.db
-          .insertInto("VoteCharacter")
-          .values({
-            id: uuidv4(),
+        return await ctx.prisma.voteCharacter.create({
+          data: {
             votedAgainstId: input.votedAgainst,
             votedForId: input.votedFor,
-          })
-          .execute();
-        return result;
+          },
+        });
       } catch (error) {
         console.log(error);
       }

@@ -4,50 +4,27 @@
 import type { GetServerSideProps } from "next";
 import Image from "next/image";
 import Head from "next/head";
-import { db } from "../server/db/db";
-
-const { count } = db.fn;
-
-interface AnimeResult {
-  id: number;
-  name: string;
-  imageUrl: string;
-  VoteFor: number;
-  VoteAgainst: number;
-}
-[];
 
 const getAnimeInOrder = async () => {
-  const query1 = await db
-    .selectFrom("Anime")
-    .leftJoin("VoteAnime", "Anime.id", "votedForId")
-    .select([
-      "Anime.id",
-      "Anime.name",
-      "Anime.imageUrl",
-      count("VoteAnime.votedForId").as("VoteFor"),
-    ])
-    .groupBy("Anime.id")
-    .execute();
-
-  const query2 = await db
-    .selectFrom("Anime")
-    .leftJoin("VoteAnime", "Anime.id", "votedAgainstId")
-    .select(["Anime.id", count("VoteAnime.votedAgainstId").as("VoteAgainst")])
-    .groupBy("Anime.id")
-    .execute();
-
-  const result: AnimeResult[] = [];
-
-  for (let i = 0; i < 100; i++) {
-    query1[i].VoteAgainst = query2[i].VoteAgainst;
-    result.push(query1[i]);
-  }
-
-  return result;
+  return await prisma.anime.findMany({
+    orderBy: {
+      VoteFor: { _count: "desc" },
+    },
+    select: {
+      id: true,
+      name: true,
+      imageUrl: true,
+      _count: {
+        select: {
+          VoteFor: true,
+          VoteAgainst: true,
+        },
+      },
+    },
+  });
 };
 
-type AnimeQueryResult = AnimeResult[];
+type AnimeQueryResult = AsyncReturnType<typeof getAnimeInOrder>;
 
 const AnimeListing: React.FC<{
   anime: AnimeQueryResult[number];
@@ -73,13 +50,13 @@ const AnimeListing: React.FC<{
         <p>
           Votes for:{" "}
           <span className="text-lg font-semibold text-emerald-300">
-            {anime.VoteFor}
+            {anime._count.VoteFor}
           </span>
         </p>
         <p>
           Votes against:{" "}
           <span className="text-lg font-semibold text-emerald-300">
-            {anime.VoteAgainst}
+            {anime._count.VoteAgainst}
           </span>
         </p>
       </div>

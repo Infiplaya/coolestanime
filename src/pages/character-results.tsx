@@ -5,50 +5,25 @@ import type { GetServerSideProps } from "next";
 import Image from "next/image";
 import Head from "next/head";
 import type { AsyncReturnType } from "../utils/ts-bs";
-import { db } from "../server/db/db";
 
-const { count } = db.fn;
-
-interface CharacterResult {
-  id: number;
-  name: string;
-  imageUrl: string;
-  VoteFor: number;
-  VoteAgainst: number;
-}
-[];
 
 const getCharacterInOrder = async () => {
-  const query1 = await db
-    .selectFrom("Character")
-    .leftJoin("VoteCharacter", "Character.id", "votedForId")
-    .select([
-      "Character.id",
-      "Character.name",
-      "Character.imageUrl",
-      count("VoteCharacter.votedForId").as("VoteFor"),
-    ])
-    .groupBy("Character.id")
-    .execute();
-
-  const query2 = await db
-    .selectFrom("Character")
-    .leftJoin("VoteCharacter", "Character.id", "votedAgainstId")
-    .select([
-      "Character.id",
-      count("VoteCharacter.votedAgainstId").as("VoteAgainst"),
-    ])
-    .groupBy("Character.id")
-    .execute();
-
-  const result: CharacterResult[] = [];
-
-  for (let i = 0; i < 100; i++) {
-    query1[i].VoteAgainst = query2[i].VoteAgainst;
-    result.push(query1[i]);
-  }
-
-  return result;
+  return await prisma.character.findMany({
+    orderBy: {
+      VoteFor: { _count: "desc" },
+    },
+    select: {
+      id: true,
+      name: true,
+      imageUrl: true,
+      _count: {
+        select: {
+          VoteFor: true,
+          VoteAgainst: true,
+        },
+      },
+    },
+  });
 };
 
 type CharacterQueryResult = AsyncReturnType<typeof getCharacterInOrder>;
@@ -77,13 +52,13 @@ const CharacterListing: React.FC<{
         <p>
           Votes for:{" "}
           <span className="text-lg font-semibold text-orange-300">
-            {character.VoteFor}
+            {character._count.VoteFor}
           </span>
         </p>
         <p>
           Votes against:{" "}
           <span className="text-lg font-semibold text-orange-300">
-            {character.VoteAgainst}
+            {character._count.VoteAgainst}
           </span>
         </p>
       </div>
