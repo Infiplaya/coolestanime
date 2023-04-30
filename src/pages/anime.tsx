@@ -101,6 +101,8 @@ const AnimeListing: React.FC<{
         width={225}
         height={318}
         alt="anime"
+        loading="lazy"
+        priority={true}
         className="h-[318px] w-[225px]"
       />
       <div className="flex flex-col items-center gap-2 px-3 py-2">
