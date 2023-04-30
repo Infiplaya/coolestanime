@@ -1,11 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import type { GetServerSideProps } from "next";
 import Image from "next/image";
 import Head from "next/head";
 import type { AsyncReturnType } from "../utils/ts-bs";
-
+import { prisma } from "../server/db/client";
 
 const getCharacterInOrder = async () => {
   return await prisma.character.findMany({
@@ -80,7 +77,7 @@ const ResultsPage: React.FC<{
       <ul role="list" className="mt-5 divide-y divide-gray-700 md:w-1/3">
         {character
           .sort((a, b) => {
-            return b.VoteFor - a.VoteFor;
+            return b._count.VoteFor - a._count.VoteFor;
           })
           .map((currentCharacter, index) => {
             return (
