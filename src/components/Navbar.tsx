@@ -38,7 +38,6 @@ export default function Navbar() {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="flex flex-col space-y-1 px-2 pt-2 pb-3">
-              <NavLink href="/">Home</NavLink>
               <NavLink href="/anime">Vote Anime</NavLink>
               <NavLink href="/character">Vote Character</NavLink>
               <NavLink href="/anime-results">Anime Results</NavLink>
